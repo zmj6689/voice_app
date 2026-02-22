@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="app-api-origin" content="" />
+    <title>Wave Field Online</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="auth-locked">
+    <div
+      id="authOverlay"
+      class="auth-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="authTitle"
+    >
+      <div class="auth-card">
+        <section class="auth-intro">
+          <h1 id="authTitle">Wave Field Online</h1>
+          <p>
+            무한한 음파 월드에서 다른 참가자들과 목소리로 소통하세요. 로그인하거나
+            회원가입을 완료하면 100명까지 동시 접속 가능한 음성 공간에 입장할 수
+            있습니다.
+          </p>
+          <ul>
+            <li>WASD로 파동 캐릭터를 자유롭게 이동</li>
+            <li>마이크를 켜고 목소리 크기에 따라 파동이 실시간 반응</li>
+            <li>WebRTC로 연결된 참가자들의 위치와 음성 자동 동기화</li>
+          </ul>
+        </section>
+        <section class="auth-panel">
+          <div class="auth-tabs" role="tablist">
+            <button
+              type="button"
+              class="auth-tab is-active"
+              data-auth-mode="login"
+              role="tab"
+              aria-selected="true"
+            >
+              로그인
+            </button>
+            <button
+              type="button"
+              class="auth-tab"
+              data-auth-mode="register"
+              role="tab"
+              aria-selected="false"
+            >
+              회원가입
+            </button>
+          </div>
+          <form id="loginForm" class="auth-form is-active" autocomplete="on">
+            <label class="input-field">
+              <span>이메일 또는 핸들</span>
+              <input
+                type="text"
+                name="loginEmail"
+                required
+                autocomplete="username"
+                placeholder="you@example.com 또는 WavePlayer"
+              />
+            </label>
+            <label class="input-field">
+              <span>비밀번호</span>
+              <input
+                type="password"
+                name="loginPassword"
+                required
+                minlength="4"
+                autocomplete="current-password"
+                placeholder="******"
+              />
+            </label>
+            <button type="submit" class="primary-action">로그인하고 입장하기</button>
+          </form>
+          <form id="registerForm" class="auth-form" autocomplete="on">
+            <label class="input-field">
+              <span>닉네임</span>
+              <input
+                type="text"
+                name="registerName"
+                required
+                minlength="2"
+                maxlength="20"
+                autocomplete="nickname"
+                placeholder="WavePlayer"
+              />
+            </label>
+            <label class="input-field">
+              <span>이메일</span>
+              <input
+                type="email"
+                name="registerEmail"
+                required
+                autocomplete="email"
+                placeholder="you@example.com"
+              />
+            </label>
+            <label class="input-field">
+              <span>비밀번호</span>
+              <input
+                type="password"
+                name="registerPassword"
+                required
+                minlength="6"
+                autocomplete="new-password"
+                placeholder="최소 6자"
+              />
+            </label>
+            <button type="submit" class="primary-action">회원가입하고 입장하기</button>
+          </form>
+          <p id="authError" class="auth-error" role="alert" hidden></p>
+        </section>
+      </div>
+    </div>
+    <main id="game" aria-label="무한 음파 필드">
+      <button
+        id="serverMenuButton"
+        class="server-menu-button"
+        type="button"
+        aria-controls="serverPanel"
+        aria-expanded="false"
+        aria-label="서버 메뉴 열기"
+      >
+        <span class="hamburger" aria-hidden="true">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </span>
+      </button>
+      <nav id="serverPanel" class="server-panel" aria-label="서버 목록">
+        <header class="server-panel-header">
+          <p id="userGreeting" class="user-greeting" aria-live="polite">
+            로그인 후 입장할 수 있습니다.
+          </p>
+          <div class="server-status-row">
+            <p id="connectionStatus" class="server-status" role="status">
+              로그인 후 서버에 연결됩니다.
+            </p>
+            <button
+              id="statusSettingsButton"
+              class="server-settings-button"
+              type="button"
+              aria-label="설정 열기"
+              hidden
+            >
+              <span class="sr-only">설정 열기</span>
+              <svg class="icon-gear" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M19.14 12.94a7.002 7.002 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.07 7.07 0 0 0-1.62-.94l-.36-2.54A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.36 2.54a7.07 7.07 0 0 0-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.61 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.002 7.002 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96a7.07 7.07 0 0 0 1.62.94l.36 2.54a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.36-2.54a7.07 7.07 0 0 0 1.62-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64ZM12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </header>
+        <ul id="serverList" class="server-list" role="list">
+          <li class="server-item" data-server-id="main">
+            <button
+              type="button"
+              class="server-entry"
+              data-server-entry="main"
+              aria-describedby="serverTooltipMain"
+              aria-label="메인 서버, 정원 100명, 현재 0명"
+            >
+              <span class="server-icon" aria-hidden="true">
+                <span class="server-icon-core"></span>
+                <span class="server-icon-ring server-icon-ring--inner"></span>
+                <span class="server-icon-ring server-icon-ring--outer"></span>
+              </span>
+              <span
+                id="serverTooltipMain"
+                class="server-tooltip"
+                role="tooltip"
+                data-server-tooltip="main"
+              >
+                <span class="tooltip-name">메인 서버</span>
+                <span class="tooltip-meta" data-server-info="main">
+                  정원 100명 · 현재 0명
+                </span>
+              </span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <div id="roomContext" class="room-context" hidden>
+        <form id="roomForm" class="room-form" autocomplete="off">
+          <div class="room-form-header">
+            <h2>통화방 만들기</h2>
+            <p>통화방 유형과 정원을 선택해 음성 공간을 열어보세요.</p>
+          </div>
+          <label class="room-field">
+            <span>통화방 이름</span>
+            <input
+              id="roomName"
+              name="roomName"
+              type="text"
+              maxlength="40"
+              placeholder="예: 편안한 수다방"
+              autocomplete="off"
+            />
+          </label>
+          <fieldset class="room-fieldset">
+            <legend>공개 범위</legend>
+            <label class="room-option">
+              <input
+                type="radio"
+                name="roomVisibility"
+                value="public"
+                checked
+              />
+              <span>공개 서버</span>
+            </label>
+            <label class="room-option">
+              <input type="radio" name="roomVisibility" value="private" />
+              <span>개인 서버</span>
+            </label>
+          </fieldset>
+          <label class="room-field">
+            <span>최대 인원</span>
+            <input
+              id="roomCapacity"
+              type="number"
+              min="1"
+              max="100"
+              step="1"
+              value="6"
+            />
+          </label>
+          <label id="roomPasswordField" class="room-field" hidden>
+            <span>접속 비밀번호</span>
+            <input
+              id="roomPassword"
+              type="password"
+              minlength="4"
+              maxlength="32"
+              autocomplete="off"
+              placeholder="비밀번호를 설정하세요"
+            />
+            <small class="room-hint"
+              >참가자는 이 비밀번호를 입력해야 합니다.</small
+            >
+          </label>
+          <p id="roomCreateError" class="room-error" role="alert" hidden></p>
+          <div class="room-actions">
+            <button type="submit" class="primary-action">생성하기</button>
+            <button type="button" id="roomCancelButton" class="ghost-button">
+              취소
+            </button>
+          </div>
+        </form>
+      </div>
+      <div
+        id="roomInfoCard"
+        class="room-info-card"
+        role="dialog"
+        aria-live="polite"
+        hidden
+      >
+        <div class="room-info-header">
+          <h3 id="roomInfoName">통화방 정보</h3>
+          <button type="button" id="roomInfoClose" class="ghost-button">
+            닫기
+          </button>
+        </div>
+        <dl class="room-info-list">
+          <div class="room-info-row">
+            <dt>방장</dt>
+            <dd id="roomInfoOwner">알 수 없음</dd>
+          </div>
+          <div class="room-info-row">
+            <dt>생성일</dt>
+            <dd id="roomInfoCreated">-</dd>
+          </div>
+          <div class="room-info-row">
+            <dt>정원</dt>
+            <dd id="roomInfoCapacity">-</dd>
+          </div>
+          <div class="room-info-row">
+            <dt>참여 인원</dt>
+            <dd id="roomInfoMembers">-</dd>
+          </div>
+        </dl>
+      </div>
+      <div id="world" aria-hidden="true">
+        <div class="world-floor" aria-hidden="true"></div>
+        <div id="player" class="avatar local" aria-label="내 캐릭터">
+          <div class="avatar-face" aria-hidden="true">
+            <div class="avatar-eye"></div>
+            <div class="avatar-eye"></div>
+          </div>
+          <div class="wave" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div id="bottomBar" class="bottom-bar" aria-label="보이스 제어 영역">
+        <div class="bottom-slot" aria-hidden="true"></div>
+        <button id="micButton" type="button" class="primary-action" disabled>
+          🎙️ 마이크 연결
+        </button>
+        <div class="bottom-slot" aria-hidden="true"></div>
+        <button
+          id="settingsButton"
+          type="button"
+          class="ghost-button"
+          hidden
+          aria-label="설정"
+        >
+          <svg class="icon-gear" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M19.14 12.94a7.002 7.002 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.07 7.07 0 0 0-1.62-.94l-.36-2.54A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.36 2.54a7.07 7.07 0 0 0-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.61 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.002 7.002 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96a7.07 7.07 0 0 0 1.62.94l.36 2.54a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.36-2.54a7.07 7.07 0 0 0 1.62-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64ZM12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"
+            ></path>
+          </svg>
+        </button>
+        <button id="logoutButton" type="button" class="ghost-button" hidden>
+          로그아웃
+        </button>
+        <div class="bottom-slot" aria-hidden="true"></div>
+      </div>
+    </main>
+    <div id="settingsOverlay" class="settings-overlay" hidden>
+      <div class="settings-backdrop" data-settings-close></div>
+      <section
+        id="settingsDialog"
+        class="settings-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settingsTitle"
+        tabindex="-1"
+      >
+        <header class="settings-header">
+          <h2 id="settingsTitle">설정 및 관리</h2>
+          <button
+            type="button"
+            id="settingsCloseButton"
+            class="ghost-button settings-close"
+            data-settings-close
+          >
+            닫기
+          </button>
+        </header>
+        <div class="settings-content">
+          <section class="settings-section" aria-labelledby="settingsAccountTitle">
+            <h3 id="settingsAccountTitle">계정 정보</h3>
+            <p class="settings-account-meta">
+              <strong id="settingsAccountName">-</strong>
+              <span id="settingsAccountEmail" class="settings-account-email">-</span>
+            </p>
+            <form id="settingsAccountForm" class="settings-form" autocomplete="off">
+              <label class="settings-field">
+                <span>표시 이름</span>
+                <input
+                  id="settingsAccountNameInput"
+                  type="text"
+                  minlength="2"
+                  maxlength="20"
+                  placeholder="닉네임을 입력하세요"
+                  required
+                />
+              </label>
+              <p
+                id="settingsAccountFeedback"
+                class="settings-feedback"
+                role="status"
+                aria-live="polite"
+              ></p>
+              <div class="settings-form-actions">
+                <button type="submit" class="primary-action">저장</button>
+              </div>
+            </form>
+          </section>
+          <section class="settings-section" aria-labelledby="settingsCreatedTitle">
+            <div class="settings-section-header">
+              <h3 id="settingsCreatedTitle">내가 만든 통화방</h3>
+              <span id="settingsCreatedCount" class="settings-count">0</span>
+            </div>
+            <p id="settingsCreatedEmpty" class="settings-empty">아직 만든 통화방이 없습니다.</p>
+            <ul id="settingsCreatedList" class="settings-room-list"></ul>
+          </section>
+          <section class="settings-section" aria-labelledby="settingsJoinedTitle">
+            <div class="settings-section-header">
+              <h3 id="settingsJoinedTitle">참여 중인 통화방</h3>
+              <span id="settingsJoinedCount" class="settings-count">0</span>
+            </div>
+            <p id="settingsJoinedEmpty" class="settings-empty">참여 중인 통화방이 없습니다.</p>
+            <ul id="settingsJoinedList" class="settings-room-list"></ul>
+          </section>
+        </div>
+      </section>
+    </div>
+    <div id="roomManageOverlay" class="room-manage-overlay" hidden aria-hidden="true">
+      <div class="room-manage-backdrop" data-room-manage-close></div>
+      <section
+        id="roomManageDialog"
+        class="room-manage-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="roomManageTitle"
+        tabindex="-1"
+      >
+        <header class="room-manage-header">
+          <div class="room-manage-header-text">
+            <p class="room-manage-label">내가 만든 통화방 관리</p>
+            <h2 id="roomManageTitle">통화방 설정</h2>
+          </div>
+          <button
+            type="button"
+            id="roomManageCloseButton"
+            class="ghost-button room-manage-close"
+            data-room-manage-close
+          >
+            닫기
+          </button>
+        </header>
+        <div class="room-manage-summary" aria-live="polite">
+          <div class="room-manage-summary-item">
+            <span class="room-manage-summary-label">현재 이름</span>
+            <strong id="roomManageSummaryName" class="room-manage-summary-value">-</strong>
+          </div>
+          <div class="room-manage-summary-item">
+            <span class="room-manage-summary-label">방장</span>
+            <strong id="roomManageSummaryOwner" class="room-manage-summary-value">-</strong>
+          </div>
+          <div class="room-manage-summary-item">
+            <span class="room-manage-summary-label">개설일</span>
+            <strong id="roomManageSummaryCreated" class="room-manage-summary-value">-</strong>
+          </div>
+          <div class="room-manage-summary-item">
+            <span class="room-manage-summary-label">참가 현황</span>
+            <strong id="roomManageSummaryMembers" class="room-manage-summary-value">0 / 0명</strong>
+          </div>
+          <div class="room-manage-summary-item">
+            <span class="room-manage-summary-label">공개 범위</span>
+            <strong id="roomManageSummaryVisibility" class="room-manage-summary-value">-</strong>
+          </div>
+        </div>
+        <form id="roomManageForm" class="room-manage-form" autocomplete="off">
+          <label class="room-manage-field">
+            <span>서버 이름</span>
+            <input
+              id="roomManageName"
+              type="text"
+              minlength="2"
+              maxlength="40"
+              placeholder="통화방 이름을 입력하세요"
+              required
+            />
+          </label>
+          <label class="room-manage-field">
+            <span>정원</span>
+            <input
+              id="roomManageCapacity"
+              type="number"
+              min="1"
+              max="100"
+              inputmode="numeric"
+              placeholder="최대 인원을 입력하세요"
+            />
+          </label>
+          <fieldset class="room-manage-field room-manage-visibility">
+            <legend>공개 범위</legend>
+            <label>
+              <input type="radio" name="roomManageVisibility" value="public" checked /> 공개
+            </label>
+            <label>
+              <input type="radio" name="roomManageVisibility" value="private" /> 개인
+            </label>
+          </fieldset>
+          <label id="roomManagePasswordField" class="room-manage-field" hidden>
+            <span>비밀번호</span>
+            <input
+              id="roomManagePassword"
+              type="password"
+              minlength="4"
+              maxlength="40"
+              autocomplete="new-password"
+              placeholder="새 비밀번호를 입력하세요"
+            />
+          </label>
+          <label class="room-manage-field room-manage-theme-field">
+            <span>링 색상</span>
+            <input id="roomManageRingColor" type="color" value="#ffffff" />
+          </label>
+          <section class="room-manage-roles" aria-labelledby="roomManageRolesTitle">
+            <div class="room-manage-section-header">
+              <div>
+                <h3 id="roomManageRolesTitle">역할 만들기</h3>
+                <p>참가자에게 부여할 역할을 추가하고 정리할 수 있습니다.</p>
+              </div>
+              <span id="roomManageRoleCount" class="room-manage-count">0/8</span>
+            </div>
+            <div class="room-manage-role-input">
+              <input
+                id="roomManageRoleInput"
+                type="text"
+                maxlength="30"
+                placeholder="예: 발표자, DJ"
+              />
+              <button
+                type="button"
+                id="roomManageRoleAdd"
+                class="ghost-button room-manage-role-add"
+              >
+                역할 추가
+              </button>
+            </div>
+            <p id="roomManageRolesEmpty" class="room-manage-empty">아직 만든 역할이 없습니다.</p>
+            <ul id="roomManageRoleList" class="room-manage-role-list"></ul>
+          </section>
+          <p id="roomManageFeedback" class="room-manage-feedback" role="status" aria-live="polite"></p>
+          <div class="room-manage-actions">
+            <button
+              type="button"
+              id="roomManageTeleport"
+              class="ghost-button room-manage-teleport"
+            >
+              통화방으로 이동
+            </button>
+            <button
+              type="button"
+              id="roomManageDelete"
+              class="ghost-button room-manage-delete"
+            >
+              통화방 삭제
+            </button>
+            <button type="submit" id="roomManageSubmit" class="primary-action">
+              변경사항 저장
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+    <div id="audioLayer" aria-hidden="true"></div>
+    <script src="roomRingOverlay.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+# Node
+node_modules/
+
+# Env (절대 공개 금지)
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
