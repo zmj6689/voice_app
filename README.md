@@ -3,6 +3,43 @@
 Not a voice chat tool.
 A living space shaped by presence.
 
+🌱 Looking for a Builder, Not a Spectator
+
+This project is still small.
+
+But the vision is not.
+
+I’m not looking for a “rockstar developer.”
+I’m looking for someone who:
+
+Wants to grow.
+
+Has big dreams.
+
+Doesn’t quit when things get messy.
+
+Cares about building something meaningful.
+
+You don’t need to be the best.
+
+But you need to want to become better.
+
+This is not about fast success.
+It’s about long-term building.
+
+If you want to:
+
+Learn real-time systems deeply
+
+Build something artistic and technical
+
+Fail, improve, and iterate
+
+Stay when it’s hard
+
+Open an issue.
+Let’s talk.
+
 🌀 What is VOICE_APP?
 
 VOICE_APP is an experiment.
