@@ -1,45 +1,146 @@
-# voice_app
-voice app with next generation
-근데 지금은 솔직히 통화기능 하나밖에 없단 말이야 그러면 재미가 약간 떨어진다고 디스코드의 화면 공유급의 iconic한 기능 하나만 더 있으면 진짜 완벽해질것 같단 말이지
+🎧 VOICE_APP
 
-난 거기서 약간 힌트를 얻었어 흑인 gang 문화 무한한 흰 화면 서버에 자기들이 돌아다니면서 그 갱을 만들수도 있고 그 안에서 지들끼리 통화방을 만들던가 아니면 갱 없이 그냥 아무공간에서 친구들이랑 통화방을 만들던가 그런 기능이 메인이 될 것 같아
+Not a voice chat tool.
+A living space shaped by presence.
 
-광고까지 생각해냈어 현실에서 갱의 모습이나 흑인이 농구하면서 대화하는 유목민의 모습이나 음악을 듣는 그런 상황들을 이 앱의 모습과 대조해서 보여주는 거야 그 모습은 약간 스파이더맨 그림체도 보여주면서 트렌디함까지 
+🌀 What is VOICE_APP?
 
-최소 mvp 
-1. 움직이며 탐험                          (o)
-2. 대형 서버                              ( )
-3. 로그인 기능                            (o) 
-4. ui/ux개편                              ( )
-5. 통화방 만들기 기능                     (o )
-6. 스토리 기능                            ( )
-7. 최소 2개의 다른 컨셉의 서버             ( )
-8. 그리고 iconic 적인 다른 하나           ( )
-9. 비즈니스 모델                          ( )
+VOICE_APP is an experiment.
 
-🗺️ 1. 영토 확장 시스템 (Territory & Gang)공간이 살아있는 유기체처럼 성장하며 갱단의 위세를 시각적으로 증명합니다.
+It is a room.
+It is a presence.
+It is an interface that reacts.
 
-성장하는 아지트: 갱단원들이 해당 구역 통화방에서 활동할수록 포인트가 쌓이며, 아지트의 반지름이 실시간으로 커집니다.
+This project explores a simple question:
 
-시각적 점령: 영역이 확장됨에 따라 갱단의 상징색과 전용 CSS 필터가 바닥을 타고 잉크처럼 번져나갑니다.
+What if voice wasn’t just heard —
+but felt through space?
 
-청각적 지배: 구역 중심부로 갈수록 갱단이 설정한 테마 BGM이 커지며, 외부인에게는 위압감을 주는 음향 효과(리버브, 베이스 강화)가 적용됩니다.
+Instead of buttons and panels,
+users exist as characters.
 
-쟁탈전 로직: 활동이 뜸해지면 영토가 줄어들고, 그 틈을 타 다른 갱단이 자기들의 색깔로 영토를 덮어씌우는 '실시간 땅 따먹기'가 가능합니다.
+Instead of static UI,
+the room breathes.
 
-🌀 2. 차원 이동 및 포탈 (Hidden Server Jump)맵의 끝자락이나 점령지의 심장부에 숨겨진 세계로 가는 통로를 구축합니다.
-히든 게이트: 특정 좌표(예: 9999, 9999)에 도달하면 다른 서버(우주 테마, 무중력 테마 등)로 텔레포트합니다.
+Instead of overwhelming features,
+only what is necessary remains.
 
-해금 조건: 단순히 가는 것이 아니라, 특정 갱 포인트나 '차원 열쇠' 아이템을 보유한 유저만 입장할 수 있는 콘텐츠 잠금 해제 개념입니다.물리 
+🎨 Philosophy
 
-법칙의 변화: 새로운 차원(서버)에 접속하면 무중력 상태가 되어 캐릭터가 유영하거나, 이동 방식 자체가 완전히 바뀌어 색다른 재미를 줍니다.
+I see this as art before product.
 
-👾 3. 캐릭터 진화 및 스킨 (Skin & Avatar)밋밋한 음파를 넘어 유저의 개성을 드러내는 생명체를 만듭니다.
-웨이브 몬스터: 기본 음파에 '눈(Eyes)'을 달아 생명체화합니다. 목소리 크기(Volume)에 따라 입(음파)이 출렁이며 살아있는 듯한 반응을 보입니다.스킨 커스터마이징:눈 모양: 화난 눈, 레이저 눈, 선글라스 등.오라(Aura): 캐릭터 주변에 휘날리는 파티클 효과 (네온 가루, 불꽃 등).
+Technology here is not the point.
+It is a medium.
 
-갱 유니폼: 갱단 소속임을 증명하는 머리 위의 뿔이나 특수 문양.성장형 외형: 갱 포인트나 숙련도가 높아질수록 캐릭터가 더 거대해지거나 화려하게 진화합니다.
+The goal is not complexity.
+The goal is clarity.
 
-🛠️ 4. 기술적 개선 방향 (Development Roadmap)
-데이터 구조화 (JSON/DB):좌표와 테마 정보를 script.js에 하드코딩하지 않고, 서버에서 실시간으로 받아오는 GANG_ZONES API 구조로 전환합니다.부드러운 연출 (CSS & Shader):transition과 opacity를 활용해 테마가 바뀔 때 화면이 툭 끊기지 않고 안개처럼 서서히 변하도록 개선합니다.성능 최적화:수백 명의 캐릭터와 확장되는 영토를 그리기 위해 Canvas API를 최적화하고, 필요한 구역의 데이터만 불러오는 '공간 분할' 기법을 검토합니다.
+Visual feedback should feel alive.
 
-그리고 그것도 추가할거야 스토리 기능, 인스타 스토리 처럼 자기 음성을 서버에 남기는 거지 하루에 최대 3번
+State changes should feel meaningful.
+
+Silence should feel different from activity.
+
+Presence should shape space.
+
+If something does not improve experience,
+it does not belong.
+
+🧠 Design Principles
+
+1. Restraint over excess
+No feature for the sake of feature.
+
+2. Space over clutter
+The room is the interface.
+
+3. State is visible
+Idle, active, recording — all reflected visually.
+
+4. Emotion through motion
+Subtle animation over loud decoration.
+
+⚙️ Technical Approach
+
+The system is intentionally simple:
+
+Vanilla JavaScript
+
+Canvas 2D for room VFX
+
+Express + WebSocket backend
+
+Redis for state synchronization
+
+PostgreSQL for persistence
+
+Prisma for schema management
+
+No heavy frameworks.
+No unnecessary abstractions.
+
+The architecture supports:
+
+Real-time room interaction
+
+Character-based presence
+
+Host-controlled environment themes
+
+Scalable state management
+
+The technology serves the experience — not the other way around.
+
+🌊 Current Exploration
+
+Reactive room wave ring
+
+Character-based UI
+
+Spatial feedback
+
+Visual state transitions
+
+Long-press interaction experiments
+
+This is an evolving system.
+
+🧭 Why Open Source?
+
+Because this is not just a product.
+
+It is an exploration of:
+
+real-time presence
+
+visual minimalism
+
+spatial communication
+
+human-centered interaction
+
+If you are interested in systems that feel alive,
+let’s build together.
+
+📌 Status
+
+Alpha-stage.
+Stable core.
+Actively evolving design language.
+
+🤝 Collaboration
+
+Looking for people interested in:
+
+Real-time systems
+
+Expressive UI
+
+Creative coding
+
+Social experimentation
+
+Not for scaling fast.
+For building something intentional.
+
+This README was crafted with the help of ChatGPT, as the author is still learning and improving their English.
